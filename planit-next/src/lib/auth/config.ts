@@ -1,6 +1,7 @@
 import { AuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import type { CredentialsProvider } from 'next-auth/providers/credentials';
 import dbConnect from '@/lib/db';
 import { User } from '@/models';
 import { comparePasswords } from '@/lib/auth';
@@ -21,7 +22,7 @@ export const authConfig: AuthOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' }
       },
-      async authorize(credentials) {
+      async authorize(credentials: any) {
         try {
           await dbConnect();
           
