@@ -1,7 +1,6 @@
 import { AuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
-import type { CredentialsProvider } from 'next-auth/providers/credentials';
 import dbConnect from '@/lib/db';
 import { User } from '@/models';
 import { comparePasswords } from '@/lib/auth';
@@ -93,7 +92,7 @@ export const authConfig: AuthOptions = {
   },
   useSecureCookies: process.env.NODE_ENV === 'production',
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       if (account?.provider === 'google') {
         try {
           await dbConnect();
