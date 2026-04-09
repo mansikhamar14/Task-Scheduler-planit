@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { User } from '@/models';
-import { awardPoints } from '@/lib/points';
 import { hashPassword } from '@/lib/auth';
 import dbConnect from '@/lib/db';
-import { validateEmail } from '@/lib/emailValidator';
 
 export async function POST(request: Request) {
   try {
     const { username, email, password, profession } = await request.json();
+
+    // Validate required fields } = await request.json();
 
     // Validate required fields
     if (!username || !email || !password) {
@@ -17,11 +17,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate email domain
-    const emailValidation = validateEmail(email);
-    if (!emailValidation.isValid) {
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { message: emailValidation.error || 'Invalid email domain' },
+        { message: 'Invalid email address' },
+        { status: 400 }
+      );
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      return NextResponse.json(
+        { message: 'Password must be at least 6 characters' },
         { status: 400 }
       );
     }
@@ -46,22 +54,7 @@ export async function POST(request: Request) {
       username,
       email,
       password: hashedPassword,
-      profession,
     });
-
-    // Award signup bonus points
-    try {
-      await awardPoints({
-        userId: user._id.toString(),
-        type: 'signup_bonus',
-        amount: 100,
-        description: 'Signup bonus',
-      });
-    } catch (pointsError) {
-      console.error('Error awarding signup bonus points:', pointsError);
-      // Do not fail registration if points awarding fails
-    }
-
     return NextResponse.json(
       { message: 'User registered successfully!' },
       { status: 201 }

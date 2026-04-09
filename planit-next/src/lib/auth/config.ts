@@ -1,13 +1,11 @@
 import { AuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import GoogleProvider from 'next-auth/providers/google';
 import dbConnect from '@/lib/db';
 import { User } from '@/models';
 import { comparePasswords } from '@/lib/auth';
 import {
   getCookieName,
   getCookieOptions,
-  buildOAuthUserData,
   getRedirectUrl,
   hasValidCredentials,
 } from './config-helpers';
@@ -55,10 +53,6 @@ export const authConfig: AuthOptions = {
         }
       }
     }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    }),
   ],
   session: {
     strategy: 'jwt',
@@ -92,44 +86,7 @@ export const authConfig: AuthOptions = {
   },
   useSecureCookies: process.env.NODE_ENV === 'production',
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === 'google') {
-        try {
-          await dbConnect();
-          
-          const existingUser = await User.findOne({ email: user.email });
-          
-          if (!existingUser) {
-            const userData = buildOAuthUserData(
-              user.email!,
-              user.name,
-              user.image,
-              'google',
-              account.providerAccountId
-            );
-            const newUser = await User.create(userData);
-            user.id = newUser._id.toString();
-          } else {
-            if (existingUser.provider === 'google') {
-              if (existingUser.providerId !== account.providerAccountId) {
-                existingUser.providerId = account.providerAccountId;
-                await existingUser.save();
-              }
-              user.id = existingUser._id.toString();
-            } else {
-              existingUser.provider = 'google';
-              existingUser.providerId = account.providerAccountId;
-              existingUser.name = user.name || existingUser.name;
-              existingUser.image = user.image || existingUser.image;
-              await existingUser.save();
-              user.id = existingUser._id.toString();
-            }
-          }
-        } catch (error) {
-          console.error('Error in signIn callback:', error);
-          return false;
-        }
-      }
+    async signIn({ user }) {
       return true;
     },
     async jwt({ token, user }) {
