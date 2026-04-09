@@ -19,12 +19,15 @@ export async function GET(request: Request) {
 
     await dbConnect();
 
+    // Convert userId to ObjectId for filtering
+    const userObjectId = new (require('mongoose')).Types.ObjectId(userId);
+
     // Check and update overdue tasks before fetching
     const now = new Date();
     
     // Find all tasks that are not completed or already overdue
     const potentiallyOverdueTasks = await Task.find({
-      userId,
+      userId: userObjectId,
       status: { $nin: ['completed', 'overdue'] }
     });
 
@@ -81,7 +84,7 @@ export async function GET(request: Request) {
     const status = searchParams.get('status');
     const priority = searchParams.get('priority');
 
-    const filter: any = { userId };
+    const filter: any = { userId: userObjectId };
     
     if (query) {
       filter.$or = [
@@ -140,8 +143,12 @@ export async function POST(request: Request) {
 
     await dbConnect();
 
+    // Convert userId to ObjectId
+    const mongoose = require('mongoose');
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
     const task = await Task.create({
-      userId,
+      userId: userObjectId,
       title,
       description,
       priority,

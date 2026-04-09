@@ -7,8 +7,6 @@ export async function POST(request: Request) {
   try {
     const { username, email, password, profession } = await request.json();
 
-    // Validate required fields } = await request.json();
-
     // Validate required fields
     if (!username || !email || !password) {
       return NextResponse.json(

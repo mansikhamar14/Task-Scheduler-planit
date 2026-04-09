@@ -45,7 +45,7 @@ export const authConfig: AuthOptions = {
           return {
             id: user._id.toString(),
             email: user.email,
-            name: user.name
+            name: user.name || undefined
           };
         } catch (error) {
           console.error('Authentication error:', error);

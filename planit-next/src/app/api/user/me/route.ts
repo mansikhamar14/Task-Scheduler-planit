@@ -15,8 +15,11 @@ export async function GET() {
 
     await dbConnect();
 
+    // Convert userId to ObjectId
+    const userObjectId = new (require('mongoose')).Types.ObjectId(userId);
+
   // Get full user info from database, including points and daily check-in timestamp
-  const user = await User.findById(userId).select('username email profession points lastDailyCheckinAt');
+  const user = await User.findById(userObjectId).select('username email profession points lastDailyCheckinAt');
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });

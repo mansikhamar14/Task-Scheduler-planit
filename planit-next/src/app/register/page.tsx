@@ -25,8 +25,7 @@ export default function RegisterPage() {
   };
 
   const validatePassword = (password: string) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return regex.test(password);
+    return password.length >= 6;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +34,7 @@ export default function RegisterPage() {
 
     // Validation
     if (!validatePassword(formData.password)) {
-      setError('Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character');
+      setError('Password must be at least 6 characters');
       return;
     }
 

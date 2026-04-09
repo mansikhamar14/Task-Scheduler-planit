@@ -27,9 +27,10 @@ export async function DELETE(
     await dbConnect();
 
     // Ensure the task exists and belongs to the user
+    const userObjectId = new ObjectId(userId);
     const task = await Task.findOne({
       _id: new ObjectId(params.id),
-      userId
+      userId: userObjectId
     });
 
     if (!task) {
@@ -68,9 +69,10 @@ export async function PUT(
     await dbConnect();
 
     // Ensure the task exists and belongs to the user
+    const userObjectId = new ObjectId(userId);
     const task = await Task.findOne({
       _id: new ObjectId(params.id),
-      userId
+      userId: userObjectId
     });
 
     if (!task) {
@@ -104,9 +106,9 @@ export async function PUT(
       
       // Record completion in history for persistent tracking
   await TaskCompletionHistory.findOneAndUpdate(
-        { userId, taskId: task._id },
+        { userId: userObjectId, taskId: task._id },
         { 
-          userId, 
+          userId: userObjectId, 
           taskId: task._id,
           completedAt: updateData.completedAt,
           taskTitle: title || task.title

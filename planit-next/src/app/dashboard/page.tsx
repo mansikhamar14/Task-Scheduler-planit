@@ -175,7 +175,9 @@ const pollInterval = setInterval(performPolling, POLLING_DELAY_MS);
         const dueB = b.dueDate ? new Date(b.dueDate).getTime() : null;
 
         if (dueA === null && dueB === null) {
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          const createdAtA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const createdAtB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return createdAtA - createdAtB;
         }
         if (dueA === null) return 1;
         if (dueB === null) return -1;
