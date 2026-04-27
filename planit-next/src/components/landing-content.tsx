@@ -6,32 +6,10 @@ import faqsData from '@/app/faqs/faqs.json';
 import MainHeader from './main-header';
 
 export default function LandingContent() {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [faqItems, setFaqItems] = useState<{ q: string; a: string }[]>([]);
   
   // THEME STATE
   const [isDark, setIsDark] = useState(false);
-
-const testimonials = [
-    {
-      quote: "Plan-It has completely transformed how I manage my daily tasks. The AI assistant is a game-changer!",
-      author: "Sarah Johnson",
-      role: "Product Manager",
-      avatar: "SJ"
-    },
-    {
-      quote: "The Pomodoro timer integration is brilliant. I'm 3x more productive than before.",
-      author: "Michael Chen",
-      role: "Software Developer",
-      avatar: "MC"
-    },
-    {
-      quote: "Finally, a task manager that understands natural language. Creating tasks feels effortless.",
-      author: "Emily Rodriguez",
-      role: "Entrepreneur",
-      avatar: "ER"
-    }
-  ];
 
   // Initialize Theme
   useEffect(() => {
@@ -60,12 +38,6 @@ const testimonials = [
     }
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [testimonials.length]);
   useEffect(() => {
     try {
       const items = (faqsData || []).map((f: any) => ({ q: f.question, a: f.answer }));
@@ -179,113 +151,6 @@ const testimonials = [
             description="Personalize themes, notification settings, and preferences."
             color="bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400"
           />
-        </div>
-      </section>
-
-      {/* SECTION 3: How It Works */}
-      <section className="bg-white dark:bg-[#11141A] border-t border-gray-200 dark:border-white/5 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
-              How Plan-It Works
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Get started in three simple steps
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            <StepCard
-              step="1"
-              title="Sign Up Free"
-              description="Create your account in seconds. No credit card needed."
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
-              }
-            />
-
-            <StepCard
-              step="2"
-              title="Add Your Tasks"
-              description="Use the AI assistant or create tasks manually with smart features."
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              }
-            />
-
-            <StepCard
-              step="3"
-              title="Get Things Done"
-              description="Track progress, use Pomodoro, and achieve your goals efficiently."
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              }
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2: Testimonials */}
-      <section className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-          
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
-              Testimonials
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Trusted by professionals worldwide
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <div className="relative bg-white dark:bg-gray-800 rounded-xl p-10 shadow-sm border border-gray-200 dark:border-gray-700">
-              <div className="absolute top-8 left-8 text-blue-500 dark:text-blue-400 opacity-30">
-                <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-              </div>
-              <div className="relative pt-6">
-                <p className="text-xl text-gray-800 dark:text-gray-200 mb-8 leading-relaxed font-medium">
-                  {testimonials[activeTestimonial].quote}
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold text-sm">
-                    {testimonials[activeTestimonial].avatar}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {testimonials[activeTestimonial].author}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {testimonials[activeTestimonial].role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Circle indicators positioned outside to overlap with step cards */}
-          <div className="flex justify-center gap-2 -mt-8 relative z-10">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveTestimonial(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === activeTestimonial
-                    ? 'bg-blue-600 w-6'
-                    : 'bg-gray-300 dark:bg-gray-700'
-                }`}
-                aria-label={`Testimonial ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
       </section>
 
